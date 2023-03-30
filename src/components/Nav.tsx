@@ -8,8 +8,8 @@ const user = {
   email: 'tom@example.com',
 }
 const navigation = [
-  { name: 'Dashboard', href: '/dasboard', current: true },
-  { name: 'Create Table', href: '/create-table', current: false },
+  { name: 'Dashboard', href: '/tables-ts/dashboard', current: true },
+  { name: 'Create Table', href: '/tables-ts/create-table', current: false },
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '#' },

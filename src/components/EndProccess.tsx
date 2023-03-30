@@ -36,7 +36,7 @@ function EndProccess(props: Props) {
       {
         action
           ? <div className="my-6 flex justify-around items-center">
-              <Link to="/dasboard" className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center">
+              <Link to="/tables-ts/dashboard" className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center">
                   Back to dashboard
               </Link>
 
@@ -46,7 +46,7 @@ function EndProccess(props: Props) {
             </div>
           : 
             <div className="my-6 flex justify-center items-center">
-            <Link to="/dasboard"
+            <Link to="/tables-ts/dashboard"
               type="button" className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center">
                 Back to dashboard
             </Link>

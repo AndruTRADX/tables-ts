@@ -52,6 +52,7 @@ function CreateAndUpdateTable(props: Props) {
 
   // Lógica de manipulación de las tablas
   const createNewTable = (): void => {
+    addNewProductToTable()
     productService.addTable(currentTable)
   }
   const addNewProductToTable = (): void => {
