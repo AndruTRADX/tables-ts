@@ -18,7 +18,7 @@ function EndProccess(props: Props) {
 
   return (
     <div className="w-full py-8 max-w-5xl flex flex-col justify-center items-center">
-      <div className="w-32 h-32 my-6 rounded-full bg-green-100 flex justify-center items-center">
+      <div className="w-24 h-24 my-6 rounded-full bg-green-100 flex justify-center items-center">
         <CheckCircleIcon className="w-16 h-16 text-green-600" />
       </div>
 

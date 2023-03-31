@@ -27,7 +27,7 @@ function CreateAndUpdateTable(props: Props) {
   const [productNameValue, setProductNameValue] = useState<string>('')
   const [colorValue, setColorValue] = useState<string>('')
   const [categoryValue, setCategoryValueValue] = useState<string>('')
-  const [priceValue, setPriceValueValue] = useState<number>(1)
+  const [priceValue, setPriceValueValue] = useState<number>(0)
   
 
   // obtener los valores de los inputs
@@ -50,38 +50,63 @@ function CreateAndUpdateTable(props: Props) {
     }
   }
 
+  // limpiar los inputs
+  const cleanAllInputs = () => {
+    setProductNameValue('')
+    setColorValue('')
+    setCategoryValueValue('')
+    setPriceValueValue(0)
+  }
+
+  // los inputs estan vacios?
+  const inputsAreCompleted = (authorValue && productNameValue && colorValue && categoryValue !== '') && (priceValue > 0)
+
   // Lógica de manipulación de las tablas
   const createNewTable = (): void => {
-    addNewProductToTable()
-    productService.addTable(currentTable)
+    if(inputsAreCompleted) {
+      addNewProductToTable()
+      productService.addTable(currentTable)
+    } else {
+      productService.addTable(currentTable)
+    }
   }
   const addNewProductToTable = (): void => {
     if(isTableCreated) {
-      setCurrentTable({
-        ...currentTable,
-        tabInfo: [
-          ...currentTable.tabInfo,
-          {
-            productName: productNameValue,
-            productColor: colorValue,
-            category: categoryValue,
-            price: priceValue
-          }
-        ]
-      })
+      if(inputsAreCompleted) {
+        setCurrentTable({
+          ...currentTable,
+          tabInfo: [
+            ...currentTable.tabInfo,
+            {
+              productName: productNameValue,
+              productColor: colorValue,
+              category: categoryValue,
+              price: priceValue
+            }
+          ]
+        })
+      } else {
+        alert('Por favor completa todos los campos')
+      }
+      cleanAllInputs()
     } else {
-      setIsTableCreated(true)
-      setCurrentTable({
-        author: authorValue,
-        tabInfo: [
-          {
-            productName: productNameValue,
-            productColor: colorValue,
-            category: categoryValue,
-            price: priceValue
-          },
-        ]
-      })
+      if(inputsAreCompleted) {
+        setIsTableCreated(true)
+        setCurrentTable({
+          author: authorValue,
+          tabInfo: [
+            {
+              productName: productNameValue,
+              productColor: colorValue,
+              category: categoryValue,
+              price: priceValue
+            },
+          ]
+        })
+        cleanAllInputs()
+      } else {
+        alert('Por favor completa todos los campos solicitados')
+      }
     }
   }
 
@@ -98,7 +123,7 @@ function CreateAndUpdateTable(props: Props) {
     <div className="max-w-5xl bg-white rounded-lg border border-gray-300 mx-auto p-6 my-8 shadow-sm">
       {
         endProccess
-          ? <EndProccess title="Table created" message="Congratulations, your table has been created successfully. What's teh next step? :)" action={true} actionMessage="Create another table" editState={setEndProccess} />
+          ? <EndProccess title="Table created" message="Congratulations, your table has been created successfully. What is the next step? :)" action={true} actionMessage="Create another table" editState={setEndProccess} />
           : <div>
               <form>
                 <div className="relative z-0 w-full mb-6 group">
@@ -109,13 +134,13 @@ function CreateAndUpdateTable(props: Props) {
       
                 <div className="grid md:grid-cols-2 md:gap-6">
                   <div className="relative z-0 w-full mb-6 group">
-                    <input onChange={handleProductNameChange}
+                    <input onChange={handleProductNameChange} value={productNameValue}
                     type="text" name="floating_product_name" id="floating_product_name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer" placeholder=" " required />
                     <label htmlFor="floating_product_name" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Product name</label>
                   </div>
                   
                   <div className="relative z-0 w-full mb-6 group">
-                    <input onChange={handleColorChange}
+                    <input onChange={handleColorChange} value={colorValue}
                     type="text" name="floating_color" id="floating_color" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer" placeholder=" " required />
                     <label htmlFor="floating_color" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Color</label>
                   </div>
@@ -123,19 +148,24 @@ function CreateAndUpdateTable(props: Props) {
                 
                 <div className="grid md:grid-cols-2 md:gap-6">
                   <div className="relative z-0 w-full mb-6 group">
-                    <input onChange={handleCategoryChange} 
+                    <input onChange={handleCategoryChange}  value={categoryValue}
                     type="text" name="floating_category" id="floating_category" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-indigo-600 peer" placeholder=" " required />
                     <label htmlFor="floating_category" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Category</label>
                   </div>
                   <div className="relative z-0 w-full mb-6 group">
-                    <input onChange={handlePriceChange} 
+                    <input onChange={handlePriceChange} value={priceValue}
                     type="number" name="floating_price" id="floating_price" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-indigo-600 peer" placeholder=" " required />
                     <label htmlFor="floating_price" className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-indigo-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Price</label>
                   </div>
                 </div>
                 
-                <button onClick={() => { createNewTable(); setEndProccess(true) }}
-                type="button" className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center">
+                <button onClick={() => { 
+                  if(isTableCreated) {
+                    createNewTable()
+                    setEndProccess(true) 
+                  }
+                }} 
+                disabled={ isTableCreated? false : true } type="button" className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center disabled:bg-red-600 disabled:cursor-not-allowed disabled:hover:bg-red-500">
                   {
                     isCreate
                       ? 'Submit table'
@@ -156,7 +186,7 @@ function CreateAndUpdateTable(props: Props) {
               {
                 isTableCreated
                   ? <GenericTable tablesData={currentTable} />
-                  : <p className="my-4 text-sm text-gray-500 leading-7">Add product before create your table :)</p>
+                  : <p className="my-4 text-sm text-gray-500 leading-7">To add products first create your table, then you can add more products :)</p>
               }
             </div>
       }

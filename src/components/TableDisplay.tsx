@@ -60,12 +60,12 @@ function Table():JSX.Element {
                       </td>
                       <td className="px-6 py-4">
                         <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>
-                        <a href="#" className="font-medium text-red-600 hover:underline pl-4" onClick={
+                        <p className="font-medium text-red-600 hover:underline inline-block cursor-pointer pl-4" onClick={
                           () => {
                             productService.deleteProductByName(data.productName)
                             setUpdateTable(true)
                           }
-                        }>Delete</a>
+                        }>Delete</p>
                       </td>
                     </tr>
                   ))
