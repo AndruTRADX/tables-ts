@@ -1,4 +1,4 @@
-import CreateAndUpdateTable from "../components/CreateUpdateTab";
+import CreateAndUpdateTable from "../components/CreateTab";
 import Nav from "../components/Nav";
 
 function CreateTable():JSX.Element {

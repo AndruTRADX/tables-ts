@@ -49,11 +49,21 @@ class ProductService {
     }
   }
 
-  public updateProduct(product: TabInfo): void {
+  // public updateProduct(product: TabInfo): void {
+  //   for (const table of this.tables) {
+  //     const index = table.tabInfo.findIndex((p) => p.productName === product.productName)
+  //     if (index !== -1) {
+  //       table.tabInfo[index] = product
+  //       return
+  //     }
+  //   }
+  // }
+
+  public updateProductByName(name: string, newProduct: TabInfo): void {
     for (const table of this.tables) {
-      const index = table.tabInfo.findIndex((p) => p.productName === product.productName)
-      if (index !== -1) {
-        table.tabInfo[index] = product
+      const productIndex = table.tabInfo.findIndex((product) => product.productName === name)
+      if (productIndex !== -1) {
+        table.tabInfo[productIndex] = newProduct
         return
       }
     }

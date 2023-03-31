@@ -18,7 +18,7 @@ function Table():JSX.Element {
         TablesData.map( (tab, index) => (
 
           <div className="relative overflow-x-auto sm:rounded-lg m-8 scrollbar-thin scrollbar-thumb-indigo-600 scrollbar-track-gray-300 hover:scrollbar-thumb-indigo-700" key={index}>
-            <p className="text-sm text-white inline-block font-medium px-3 py-2 bg-indigo-600 rounded-t-md">Create by {tab.author}</p>
+            <p className="text-sm text-white inline-block font-medium px-3 py-2 bg-indigo-600 rounded-t-md">Created by {tab.author}</p>
             <table className="w-full text-sm text-left text-gray-500">
 
               <thead className="text-sm text-gray-800 bg-gray-50 border-b border-gray-300">

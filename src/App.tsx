@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./routes/Home.";
 import Login from "./routes/Login";
 import CreateTable from "./routes/CreateTab";
-import Hello from "./routes/Initial";
+import Hello from "./routes/Hello";
 
 function App() {
   return (
