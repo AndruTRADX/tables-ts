@@ -24,15 +24,15 @@ function Hello():JSX.Element {
             Work with your team to create data in an organized manner through our fast and intuitive interface, which will allow you to have a more efficient and effective experience in creating your data.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 ">
-              <Link
-                to="/tables-ts/dashboard"
-                className="rounded-md bg-indigo-600 px-3.5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 w-full sm:w-auto"
-              >
-                Get started
+              <Link to="/tables-ts/dashboard" className="relative inline-flex items-center justify-center p-4 px-5 py-3 overflow-hidden font-medium text-indigo-600 transition duration-300 ease-out rounded-full shadow-lg group hover:ring-1 hover:ring-purple-500">
+                <span className="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-600 via-purple-600 to-pink-700" />
+                <span className="absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-pink-500 rounded-full opacity-30 group-hover:rotate-90 ease" />
+                <span className="relative text-white">Get started</span>
               </Link>
-              <Link to="/tables-ts/login" className="rounded-md bg-white hover:bg-gray-50 text-sm font-semibold px-3.5 py-2.5  border border-gray-300 leading-6 text-gray-900 w-full sm:w-auto">
+
+              {/* <Link to="/tables-ts/login" className="rounded-md bg-white hover:bg-gray-50 text-sm font-semibold px-3.5 py-2.5  border border-gray-300 leading-6 text-gray-900 w-full sm:w-auto">
                 Register or log in
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
