@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
 import productService from '../services/TablesGlobal'
+import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { EditProductContext } from "../context/EditProductContext"
 
 function Table():JSX.Element {
   const [TablesData, setTablesData] = useState(productService.getAllTables())
   const [updateTable, setUpdateTable] = useState(false)
+  const { productName, setProductName } = useContext(EditProductContext)
 
   useEffect(() => {
     if (updateTable) {
@@ -59,7 +63,13 @@ function Table():JSX.Element {
                         ${ data.price }
                       </td>
                       <td className="px-6 py-4">
-                        <a href="#" className="font-medium text-blue-600 hover:underline">Edit</a>
+                        <Link to="/tables-ts/edit-product" className="font-medium text-blue-600 hover:underline"
+                          onClick={
+                            ():void => {
+                              setProductName(data.productName)
+                            }
+                          }
+                        >Edit</Link>
                         <p className="font-medium text-red-600 hover:underline inline-block cursor-pointer pl-4" onClick={
                           () => {
                             productService.deleteProductByName(data.productName)

@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react'
 import { TableDataType } from '../data/TablesData'
 import productService from '../services/TablesGlobal'
-import GenericTable from './TableGeneric';
-import EndProccess from './EndProccess';
+import GenericTable from './TableGeneric'
+import EndProccess from './EndProccess'
 
 type User = {
   name: string;
   age: number;
   email: string;
-};
+}
 
 type Props = {
   create: boolean;
   user?: User;
-};
+}
 
-function CreateAndUpdateTable(props: Props) {
+function CreateTableForm(props: Props) {
   // Estados iniciales
   const [isCreate, setIsCreate] = useState<boolean>(props.create)
   const [endProccess, setEndProccess] = useState<boolean>(false)
@@ -194,4 +194,4 @@ function CreateAndUpdateTable(props: Props) {
   )
 }
 
-export default CreateAndUpdateTable
+export default CreateTableForm

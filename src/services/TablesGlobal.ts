@@ -49,6 +49,16 @@ class ProductService {
     }
   }
 
+  public getProductByName(name: string): TabInfo | undefined {
+    for (const table of this.tables) {
+      const product = table.tabInfo.find((product) => product.productName === name)
+      if (product) {
+        return product
+      }
+    }
+    return undefined
+  }
+
   // public updateProduct(product: TabInfo): void {
   //   for (const table of this.tables) {
   //     const index = table.tabInfo.findIndex((p) => p.productName === product.productName)
