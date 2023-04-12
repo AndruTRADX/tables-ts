@@ -7,7 +7,7 @@ import { EditProductContext } from "../context/EditProductContext"
 function Table():JSX.Element {
   const [TablesData, setTablesData] = useState(productService.getAllTables())
   const [updateTable, setUpdateTable] = useState(false)
-  const { productName, setProductName } = useContext(EditProductContext)
+  const { setProductIndex, setProductAuthor, setTabletIndex } = useContext(EditProductContext)
 
   useEffect(() => {
     if (updateTable) {
@@ -22,7 +22,17 @@ function Table():JSX.Element {
         TablesData.map( (tab, index) => (
 
           <div className="relative overflow-x-auto sm:rounded-lg m-8 scrollbar-thin scrollbar-thumb-indigo-600 scrollbar-track-gray-300 hover:scrollbar-thumb-indigo-700" key={index}>
-            <p className="text-sm text-white inline-block font-medium px-3 py-2 bg-indigo-600 rounded-t-md">Created by {tab.author}</p>
+            
+            <div className="w-full flex justify-between">
+              <p className="text-sm text-white inline-block font-medium px-3 py-2 bg-indigo-600 rounded-t-md">Created by {tab.author}</p>
+              
+              <button className="text-sm text-white inline-block font-medium px-3 py-2 bg-red-600 rounded-t-md"
+              onClick={() => {
+                productService.deleteTableByIndexAndAuthor(index, tab.author)
+                setUpdateTable(true)
+              }}>Delete Table</button>
+            </div>
+
             <table className="w-full text-sm text-left text-gray-500">
 
               <thead className="text-sm text-gray-800 bg-gray-50 border-b border-gray-300">
@@ -66,13 +76,15 @@ function Table():JSX.Element {
                         <Link to="/tables-ts/edit-product" className="font-medium text-blue-600 hover:underline"
                           onClick={
                             ():void => {
-                              setProductName(data.productName)
+                              setProductIndex(index2)
+                              setTabletIndex(index)
+                              setProductAuthor(tab.author)
                             }
                           }
                         >Edit</Link>
                         <p className="font-medium text-red-600 hover:underline inline-block cursor-pointer pl-4" onClick={
                           () => {
-                            productService.deleteProductByName(data.productName)
+                            productService.deleteProductByIndexAndTableAuthor(index2, tab.author)
                             setUpdateTable(true)
                           }
                         }>Delete</p>

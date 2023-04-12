@@ -5,14 +5,23 @@ import { EditProductContext } from "../context/EditProductContext"
 
 import EndProccess from "./EndProccess"
 import { TabInfo } from "../data/TablesData"
+import { Link } from "react-router-dom"
 
 
 function EditProductForm() {
   // Estados iniciales
   const [endProccess, setEndProccess] = useState<boolean>(false)
   const [productEdited, setProductEdited] = useState<boolean>(false)
-  const { productName } = useContext(EditProductContext)
+  const { 
+    productIndex, 
+    setProductIndex, 
+    tableIndex, 
+    setTabletIndex, 
+    productAuthor, 
+    setProductAuthor 
+  } = useContext(EditProductContext)
 
+  // Estados del producto 
   const [previousProduct, setPreviousProduct] = useState<TabInfo>(() => {
     const defaultProduct: TabInfo = {
       productName: '',
@@ -21,10 +30,9 @@ function EditProductForm() {
       category: '',
     }
   
-    const product = productName ? productService.getProductByName(productName) : undefined;
-    return product || defaultProduct;
+    const product = productAuthor ? productService.getProductByTableAndProductIndex(tableIndex, productIndex) : undefined
+    return product || defaultProduct
   })
-
   const [currentProduct, setCurrentProduct] = useState<TabInfo>(() => {
     const defaultProduct: TabInfo = {
       productName: '',
@@ -33,15 +41,9 @@ function EditProductForm() {
       category: '',
     }
   
-    const product = productName ? productService.getProductByName(productName) : undefined;
-    return product || defaultProduct;
+    const product = productAuthor ? productService.getProductByTableAndProductIndex(tableIndex, productIndex) : undefined
+    return product || defaultProduct
   })
-  
-  useEffect(()=> {
-    if(previousProduct === currentProduct) {
-      setProductEdited(true)
-    } 
-  },[currentProduct])
 
   // Estados de los inputs
   const [productNameValue, setProductNameValue] = useState<string>(currentProduct.productName || '')
@@ -57,7 +59,6 @@ function EditProductForm() {
       [property]: value
     })
   }
-
   const handleProductNameChange = (event: { target: { value: any; }; }) => {
     setProductNameValue(event.target.value)
     handleInputChange("productName", event.target.value)
@@ -88,15 +89,28 @@ function EditProductForm() {
 
   // los inputs estan vacios?
   const inputsAreCompleted = ( productNameValue && colorValue && categoryValue !== '') && (priceValue > 0)
+  
+  // los datos son iguales?
+  const dataAreSame = (
+    (previousProduct.productName !== currentProduct.productName) ||
+    (previousProduct.price !== currentProduct.price) ||
+    (previousProduct.productColor !== currentProduct.productColor) ||
+    (previousProduct.category !== currentProduct.category)
+  )
+  useEffect(()=> {
+    if(dataAreSame) {
+      setProductEdited(true)
+    } else {
+      setProductEdited(false)
+    }
+  },[currentProduct])
 
   // Lógica de manipulación de las tablas
   const editProduct = (): void => {
-    if(inputsAreCompleted && inputsAreCompleted) {
-      if (productName && productName !== '') {
-        productService.updateProductByName(productName, currentProduct)
+    if(inputsAreCompleted && productEdited) {
+      if (productAuthor && productAuthor !== "") {
+        productService.updateProductByTableAndProductIndex(tableIndex, productIndex, currentProduct)
       }
-    } else {
-      alert('Something went wrong, please check that the information is not empty.')
     }
   }
   
@@ -105,7 +119,7 @@ function EditProductForm() {
       {
         endProccess
           ? <EndProccess title="Product edited successfully" message="The changes to your product have been uploaded to the table successfully." />
-          : productName && productName !== '' 
+          : productAuthor !== "" 
             ? <div>
             <form>
     
@@ -137,9 +151,13 @@ function EditProductForm() {
               </div>
               
               <button onClick={() => { 
-                if(productEdited && inputsAreCompleted) {
+                if(inputsAreCompleted && productEdited) {
                   editProduct()
+                  setProductIndex(0)
+                  setTabletIndex(0)
+                  setProductAuthor("")
                   setEndProccess(true) 
+                  cleanAllInputs()
                 } else {
                   alert('Something went wrong, please check that the information is not empty.')
                 }
@@ -147,11 +165,21 @@ function EditProductForm() {
               disabled={ productEdited? false : true } type="button" className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 text-center disabled:bg-red-600 disabled:cursor-not-allowed disabled:hover:bg-red-500">
                 Edit Product
               </button>
+
+              <Link to="/tables-ts/dashboard" onClick={() => { 
+                setProductIndex(0)
+                setTabletIndex(0)
+                setProductAuthor("")
+                cleanAllInputs()
+              }}
+                type="button" className="text-gray-600 bg-white hover:bg-gray-50 border border-gray-300 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-auto px-5 py-2.5 ml-4 text-center">
+                  Cancel
+                </Link>
             </form>
 
           </div>
 
-          : <EndProccess title="You shouldn't be here :(" message="Please exit this route and return to the dashboard, there's no bug around here :'(" isNotGood={true} />
+          : <EndProccess title="You shouldn't be here :(" message="Please exit this route and return to the dashboard, there's no bug around here." isNotGood={true} />
       }
     </div>
   )

@@ -1,7 +1,6 @@
 import { TableDataType, TablesData, TabInfo } from '../data/TablesData'
 
 class ProductService {
-
   private tables: TableDataType[]
 
   constructor(tables: TableDataType[]) {
@@ -16,41 +15,17 @@ class ProductService {
     return this.tables.find((table) => table.author === author)
   }
 
-  public getTableByName(name: string): TabInfo | undefined {
-    for (const table of this.tables) {
-      for (const product of table.tabInfo) {
-        if (product.productName === name) {
-          return product
-        }
-      }
-    }
-    return undefined
+  public getTableByIndex(index: number): TableDataType | undefined {
+    return this.tables.find((table, i) => i === index)
   }
 
-  public addProductToTable(author: string, product: TabInfo): void {
-    let table = this.getTableByAuthor(author)
-    if (!table) {
-      table = { author, tabInfo: [] }
-      this.tables.push(table)
-    }
-    table.tabInfo.push(product)
+  public getTableByAuthorAndIndex(author: string, index: number): TableDataType | undefined {
+    return this.tables.find((table, i) => table.author === author && i === index)
   }
 
-  public deleteProductByName(name: string): void {
-    for (const table of this.tables) {
-      const index = table.tabInfo.findIndex((product) => product.productName === name)
-      if (index !== -1) {
-        table.tabInfo.splice(index, 1)
-        if (table.tabInfo.length === 0) {
-          this.deleteTableByAuthor(table.author)
-        }
-        return
-      }
-    }
-  }
-
-  public getProductByName(name: string): TabInfo | undefined {
-    for (const table of this.tables) {
+  public getProductByNameAndTableAuthor(name: string, author: string): TabInfo | undefined {
+    const table = this.getTableByAuthor(author)
+    if (table) {
       const product = table.tabInfo.find((product) => product.productName === name)
       if (product) {
         return product
@@ -59,36 +34,52 @@ class ProductService {
     return undefined
   }
 
-  // public updateProduct(product: TabInfo): void {
-  //   for (const table of this.tables) {
-  //     const index = table.tabInfo.findIndex((p) => p.productName === product.productName)
-  //     if (index !== -1) {
-  //       table.tabInfo[index] = product
-  //       return
-  //     }
-  //   }
-  // }
-
-  public updateProductByName(name: string, newProduct: TabInfo): void {
-    for (const table of this.tables) {
-      const productIndex = table.tabInfo.findIndex((product) => product.productName === name)
-      if (productIndex !== -1) {
-        table.tabInfo[productIndex] = newProduct
-        return
+  public getProductByTableAndProductIndex(tableIndex: number, productIndex: number): TabInfo | undefined {
+    const table = this.getTableByIndex(tableIndex);
+    if (table) {
+      const product = table.tabInfo[productIndex];
+      if (product) {
+        return product;
       }
     }
-  }
-
-  public deleteTableByAuthor(author: string): void {
-    const index = this.tables.findIndex((table) => table.author === author)
-    if (index !== -1) {
-      this.tables.splice(index, 1)
-    }
+    return undefined;
   }
 
   public addTable(table: TableDataType): void {
     this.tables.push(table)
   }
+
+  public addProductToTable(author: string, index: number, product: TabInfo): void {
+    const table = this.getTableByAuthorAndIndex(author, index)
+    if (table) {
+      table.tabInfo.push(product)
+    }
+  }
+
+  public updateProductByTableAndProductIndex(tableIndex: number, productIndex: number, newProduct: TabInfo): void {
+    const table = this.getTableByIndex(tableIndex);
+    if (table) {
+      table.tabInfo[productIndex] = newProduct;
+    }
+  }
+
+  public deleteProductByIndexAndTableAuthor(index: number, author: string): void {
+    const table = this.getTableByAuthor(author)
+    if (table) {
+      table.tabInfo.splice(index, 1)
+      if (table.tabInfo.length === 0) {
+        this.deleteTableByIndexAndAuthor(index, author)
+      }
+    }
+  }
+
+  public deleteTableByIndexAndAuthor(index: number, author: string): void {
+    const table = this.getTableByAuthorAndIndex(author, index)
+    if (table) {
+      this.tables.splice(this.tables.indexOf(table), 1);
+    }
+  }
+
 }
 
 const productService = new ProductService(TablesData)

@@ -1,4 +1,4 @@
-import CreateTableForm from "../components/CreateTab";
+import CreateTableForm from "../components/CreateTabForm";
 import Nav from "../components/Nav";
 
 function CreateTable():JSX.Element {
